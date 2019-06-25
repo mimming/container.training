@@ -1,6 +1,6 @@
 # Our sample application
 
-- We will clone the GitHub repository onto our `node1`
+- We will clone the GitHub repository onto our Cloud shell
 
 - The repository also contains scripts and tools that we will use through the workshop
 
@@ -15,7 +15,7 @@ fi
 ```
 -->
 
-- Clone the repository on `node1`:
+- Clone the repository on our cloud shell:
   ```bash
   git clone https://@@GITREPO@@
   ```
@@ -123,6 +123,7 @@ and displays aggregated logs.
 class: pic
 
 ![Diagram showing the 5 containers of the applications](images/dockercoins-diagram.svg)
+
 
 ---
 
@@ -247,14 +248,9 @@ class: extra-details
 - The `webui` container exposes a web dashboard; let's view it
 
 .exercise[
-
-- With a web browser, connect to `node1` on port 8000
-
-- Remember: the `nodeX` aliases are valid only on the nodes themselves
-
-- In your browser, you need to enter the IP address of your node
-
-<!-- ```open http://node1:8000``` -->
+0. Change the preview port on Cloud Shell to 8000
+0. Preview
+0. Profit
 
 ]
 

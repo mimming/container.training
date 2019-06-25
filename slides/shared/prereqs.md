@@ -1,5 +1,7 @@
 # Pre-requirements
 
+- Be comfortable with the GCP console & Cloud Shell
+
 - Be comfortable with the UNIX command line
 
   - navigating directories
@@ -72,17 +74,20 @@ class: in-person, pic
 
 class: in-person
 
-## You get a cluster of cloud VMs
+## You get a GCP account
 
-- Each person gets a private cluster of cloud VMs (not shared with anybody else)
+- Each person gets a private GCP account
 
-- They'll remain up for the duration of the workshop
+- They'll remain active until the end of the day
 
-- You should have a little card with login+password+IP addresses
+- You should have a little blue card with credentials
 
-- You can automatically SSH from one VM to another
+.exercise[
 
-- The nodes have aliases: `node1`, `node2`, etc.
+0. Log in to your account
+0. Click on all of the 'accept' dialogs
+0. Open Cloud Shell 
+]
 
 ---
 
@@ -104,68 +109,3 @@ class: in-person
   - a web browser
 
   - an SSH client
-
----
-
-class: in-person
-
-## SSH clients
-
-- On Linux, OS X, FreeBSD... you are probably all set
-
-- On Windows, get one of these:
-
-  - [putty](http://www.putty.org/)
-  - Microsoft [Win32 OpenSSH](https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH)
-  - [Git BASH](https://git-for-windows.github.io/)
-  - [MobaXterm](http://mobaxterm.mobatek.net/)
-
-- On Android, [JuiceSSH](https://juicessh.com/)
-  ([Play Store](https://play.google.com/store/apps/details?id=com.sonelli.juicessh))
-  works pretty well
-
-- Nice-to-have: [Mosh](https://mosh.org/) instead of SSH, if your internet connection tends to lose packets
-
----
-
-class: in-person, extra-details
-
-## What is this Mosh thing?
-
-*You don't have to use Mosh or even know about it to follow along.
-<br/>
-We're just telling you about it because some of us think it's cool!*
-
-- Mosh is "the mobile shell"
-
-- It is essentially SSH over UDP, with roaming features
-
-- It retransmits packets quickly, so it works great even on lossy connections
-
-  (Like hotel or conference WiFi)
-
-- It has intelligent local echo, so it works great even in high-latency connections
-
-  (Like hotel or conference WiFi)
-
-- It supports transparent roaming when your client IP address changes
-
-  (Like when you hop from hotel to conference WiFi)
-
----
-
-class: in-person, extra-details
-
-## Using Mosh
-
-- To install it: `(apt|yum|brew) install mosh`
-
-- It has been pre-installed on the VMs that we are using
-
-- To connect to a remote machine: `mosh user@host`
-
-  (It is going to establish an SSH connection, then hand off to UDP)
-
-- It requires UDP ports to be open
-
-  (By default, it uses a UDP port between 60000 and 61000)

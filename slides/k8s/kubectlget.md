@@ -6,7 +6,7 @@
 
   (Everything you can do with `kubectl`, you can do directly with the API)
 
-- On our machines, there is a `~/.kube/config` file with:
+- On typical, there is a `~/.kube/config` file with:
 
   - the Kubernetes API address
 
@@ -17,6 +17,20 @@
 - Or directly `--server`, `--user`, etc.
 
 - `kubectl` can be pronounced "Cube C T L", "Cube cuttle", "Cube cuddle"...
+
+---
+
+## Connect to our cluster
+
+Is it up yet?  Yay! Let's go.
+
+.exercise[
+0. Click the 'Connect' button next to your new cluster
+0. Run that command in cloud shell
+]
+
+This will create the `~/.kube/config` file and `kubectl` will start working
+
 
 ---
 
@@ -146,7 +160,7 @@ class: extra-details
 
 - However, YAML output is often simultaneously too much and not enough
 
-- For instance, `kubectl get node node1 -o yaml` is:
+- For instance, `kubectl get node NODE_NAME -o yaml` is:
 
   - too much information (e.g.: list of images available on this node)
 
@@ -162,20 +176,20 @@ class: extra-details
 
 - `kubectl describe` needs a resource type and (optionally) a resource name
 
-- It is possible to provide a resource name *prefix*
-
-  (all matching objects will be displayed)
+- It is possible to provide a resource name *prefix* (all matching objects will be displayed)
 
 - `kubectl describe` will retrieve some extra information about the resource
 
 .exercise[
 
 - Look at the information available for `node1` with one of the following commands:
-  ```bash
-  kubectl describe node/node1
-  kubectl describe node node1
+  ```bash  
+  kubectl get nodes  # To get node names
+  ...
+  
+  kubectl describe node/NODE_NAME
+  kubectl describe node NODE_NAME
   ```
-
 ]
 
 (We should notice a bunch of control plane pods.)
@@ -305,21 +319,20 @@ The error that we see is expected: the Kubernetes API requires authentication.
 
 ## What are all these control plane pods?
 
+<!--
+in GKE they run elsewhere
 - `etcd` is our etcd server
 
 - `kube-apiserver` is the API server
+-->
 
 - `kube-controller-manager` and `kube-scheduler` are other control plane components
 
-- `coredns` provides DNS-based service discovery ([replacing kube-dns as of 1.11](https://kubernetes.io/blog/2018/07/10/coredns-ga-for-kubernetes-cluster-dns/))
+- `kube-dns` provides DNS-based service discovery
 
 - `kube-proxy` is the (per-node) component managing port mappings and such
 
-- `weave` is the (per-node) component managing the network overlay
-
 - the `READY` column indicates the number of containers in each pod
-
-  (1 for most pods, but `weave` has 2, for instance)
 
 ---
 
@@ -379,6 +392,8 @@ Nothing!
 class: extra-details
 
 ## Exploring `kube-public`
+
+(This does not seem to work in GKE)
 
 - The only interesting object in `kube-public` is a ConfigMap named `cluster-info`
 

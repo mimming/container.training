@@ -1,38 +1,8 @@
 class: in-person
 
-## Connecting to our lab environment
-
-.exercise[
-
-- Log into the first VM (`node1`) with your SSH client
-
-<!--
-```bash
-for N in $(awk '/\Wnode/{print $2}' /etc/hosts); do
-  ssh -o StrictHostKeyChecking=no $N true
-done
-```
-
-```bash
-### FIXME find a way to reset the cluster, maybe?
-```
--->
-
-- Check that you can SSH (without password) to `node2`:
-  ```bash
-  ssh node2
-  ```
-- Type `exit` or `^D` to come back to `node1`
-
-<!-- ```bash exit``` -->
-
-]
-
-If anything goes wrong — ask for help!
-
----
-
 ## Doing or re-doing the workshop on your own?
+
+- This workshop assumes no weird security stuff that might exist in some GCP orgs
 
 - Use something like
   [Play-With-Docker](http://play-with-docker.com/) or
@@ -78,36 +48,15 @@ You will need a Docker ID to use Play-With-Docker.
 
 ---
 
-## We will (mostly) interact with node1 only
-
-*These remarks apply only when using multiple nodes, of course.*
-
-- Unless instructed, **all commands must be run from the first VM, `node1`**
-
-- We will only check out/copy the code on `node1`
-
-- During normal operations, we do not need access to the other nodes
-
-- If we had to troubleshoot issues, we would use a combination of:
-
-  - SSH (to access system logs, daemon status...)
-
-  - Docker API (to check running containers and container engine status)
-
----
-
 ## Terminals
 
 Once in a while, the instructions will say:
-<br/>"Open a new terminal."
+<br/>"Open a new terminal on node1."
 
-There are multiple ways to do this:
+This is because I haven't gone back and updated everything to refer to Cloud Shell explicitly
 
-- create a new window or tab on your machine, and SSH into the VM;
+Just open a new tab in Cloud shell
 
-- use screen or tmux on the VM and open a new window from there.
-
-You are welcome to use the method that you feel the most comfortable with.
 
 ---
 
@@ -131,3 +80,16 @@ It has been preinstalled on your workshop nodes.*
 - Ctrl-b arrows → navigate to other windows
 - Ctrl-b d → detach session
 - tmux attach → reattach to session
+
+---
+
+## Create a GKE cluster
+We need a Kubernetes cluster, so lets make one the easy way (with GKE).  This takes awhile, so we'll let it run in the 
+background. 
+
+.exercise[
+0. Go to Kubernetes Engine on the GCP Console
+0. Wait for the API to be enabled
+0. Create a 'Standard' cluster with all of the default settings
+0. Wait -- or better yet do GKE cluster creation stretches
+]

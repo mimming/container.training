@@ -29,11 +29,34 @@ Container Orchestration<br/>with Docker and Swarm<br/>
 
 .debug[
 ```
-?? venv/
+ M slides/g2g.yml
+ M slides/g2g.yml.html
+ M slides/intro-fullday.yml.html
+ M slides/intro-selfpaced.yml.html
+ M slides/k8s/intro.md
+ M slides/k8s/kubectlexpose.md
+ M slides/k8s/kubectlget.md
+ M slides/k8s/kubenet.md
+ M slides/k8s/setup-k8s.md
+ M slides/k8s/versions-k8s.md
+ M slides/kadm-fullday.yml.html
+ M slides/kadm-twodays.yml.html
+ M slides/kube-fullday.yml.html
+ M slides/kube-halfday.yml.html
+ M slides/kube-selfpaced.yml.html
+ M slides/kube-twodays.yml.html
+ M slides/shared/about-slides.md
+ M slides/shared/connecting.md
+ M slides/shared/prereqs.md
+ M slides/shared/sampleapp.md
+ M slides/swarm-fullday.yml.html
+ M slides/swarm-halfday.yml.html
+ M slides/swarm-selfpaced.yml.html
+ M slides/swarm-video.yml.html
 
 ```
 
-These slides have been built from commit: 851dbf9
+These slides have been built from commit: 7f7bef3
 
 
 [shared/title.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/title.md)]
@@ -101,29 +124,14 @@ class: self-paced
 
   https://github.com/jpetazzo/container.training
 
-- You can get updated "builds" of the slides there:
+- You can get updated "builds" of the slides from the canonical source:
 
   http://container.training/
+  
+- You can see these slides, which are less likely to be up to date
 
-<!--
-.exercise[
-```open https://github.com/jpetazzo/container.training```
-```open http://container.training/```
-]
--->
-
---
-
-- Typos? Mistakes? Questions? Feel free to hover over the bottom of the slide ...
-
-.footnote[.emoji[👇] Try it! The source file will be shown and you can view it on GitHub and fork and edit it.]
-
-<!--
-.exercise[
-```open https://github.com/jpetazzo/container.training/tree/master/slides/common/about-slides.md```
-]
--->
-
+  https://jen.run/g2g-kube
+  
 .debug[[shared/about-slides.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/about-slides.md)]
 ---
 
@@ -257,6 +265,8 @@ Pre-requirements
 ---
 # Pre-requirements
 
+- Be comfortable with the GCP console & Cloud Shell
+
 - Be comfortable with the UNIX command line
 
   - navigating directories
@@ -334,17 +344,20 @@ class: in-person, pic
 
 class: in-person
 
-## You get a cluster of cloud VMs
+## You get a GCP account
 
-- Each person gets a private cluster of cloud VMs (not shared with anybody else)
+- Each person gets a private GCP account
 
-- They'll remain up for the duration of the workshop
+- They'll remain active until the end of the day
 
-- You should have a little card with login+password+IP addresses
+- You should have a little blue card with credentials
 
-- You can automatically SSH from one VM to another
+.exercise[
 
-- The nodes have aliases: `node1`, `node2`, etc.
+0. Log in to your account
+0. Click on all of the 'accept' dialogs
+0. Open Cloud Shell 
+]
 
 .debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
 ---
@@ -370,110 +383,11 @@ class: in-person
 
 .debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
 ---
-
 class: in-person
-
-## SSH clients
-
-- On Linux, OS X, FreeBSD... you are probably all set
-
-- On Windows, get one of these:
-
-  - [putty](http://www.putty.org/)
-  - Microsoft [Win32 OpenSSH](https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH)
-  - [Git BASH](https://git-for-windows.github.io/)
-  - [MobaXterm](http://mobaxterm.mobatek.net/)
-
-- On Android, [JuiceSSH](https://juicessh.com/)
-  ([Play Store](https://play.google.com/store/apps/details?id=com.sonelli.juicessh))
-  works pretty well
-
-- Nice-to-have: [Mosh](https://mosh.org/) instead of SSH, if your internet connection tends to lose packets
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-
-class: in-person, extra-details
-
-## What is this Mosh thing?
-
-*You don't have to use Mosh or even know about it to follow along.
-<br/>
-We're just telling you about it because some of us think it's cool!*
-
-- Mosh is "the mobile shell"
-
-- It is essentially SSH over UDP, with roaming features
-
-- It retransmits packets quickly, so it works great even on lossy connections
-
-  (Like hotel or conference WiFi)
-
-- It has intelligent local echo, so it works great even in high-latency connections
-
-  (Like hotel or conference WiFi)
-
-- It supports transparent roaming when your client IP address changes
-
-  (Like when you hop from hotel to conference WiFi)
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-
-class: in-person, extra-details
-
-## Using Mosh
-
-- To install it: `(apt|yum|brew) install mosh`
-
-- It has been pre-installed on the VMs that we are using
-
-- To connect to a remote machine: `mosh user@host`
-
-  (It is going to establish an SSH connection, then hand off to UDP)
-
-- It requires UDP ports to be open
-
-  (By default, it uses a UDP port between 60000 and 61000)
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-class: in-person
-
-## Connecting to our lab environment
-
-.exercise[
-
-- Log into the first VM (`node1`) with your SSH client
-
-<!--
-```bash
-for N in $(awk '/\Wnode/{print $2}' /etc/hosts); do
-  ssh -o StrictHostKeyChecking=no $N true
-done
-```
-
-```bash
-### FIXME find a way to reset the cluster, maybe?
-```
--->
-
-- Check that you can SSH (without password) to `node2`:
-  ```bash
-  ssh node2
-  ```
-- Type `exit` or `^D` to come back to `node1`
-
-<!-- ```bash exit``` -->
-
-]
-
-If anything goes wrong — ask for help!
-
-.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
----
 
 ## Doing or re-doing the workshop on your own?
+
+- This workshop assumes no weird security stuff that might exist in some GCP orgs
 
 - Use something like
   [Play-With-Docker](http://play-with-docker.com/) or
@@ -521,37 +435,15 @@ You will need a Docker ID to use Play-With-Docker.
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
 
-## We will (mostly) interact with node1 only
-
-*These remarks apply only when using multiple nodes, of course.*
-
-- Unless instructed, **all commands must be run from the first VM, `node1`**
-
-- We will only check out/copy the code on `node1`
-
-- During normal operations, we do not need access to the other nodes
-
-- If we had to troubleshoot issues, we would use a combination of:
-
-  - SSH (to access system logs, daemon status...)
-
-  - Docker API (to check running containers and container engine status)
-
-.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
----
-
 ## Terminals
 
 Once in a while, the instructions will say:
-<br/>"Open a new terminal."
+<br/>"Open a new terminal on node1."
 
-There are multiple ways to do this:
+This is because I haven't gone back and updated everything to refer to Cloud Shell explicitly
 
-- create a new window or tab on your machine, and SSH into the VM;
+Just open a new tab in Cloud shell
 
-- use screen or tmux on the VM and open a new window from there.
-
-You are welcome to use the method that you feel the most comfortable with.
 
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
@@ -576,6 +468,20 @@ It has been preinstalled on your workshop nodes.*
 - Ctrl-b arrows → navigate to other windows
 - Ctrl-b d → detach session
 - tmux attach → reattach to session
+
+.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
+---
+
+## Create a GKE cluster
+We need a Kubernetes cluster, so lets make one the easy way (with GKE).  This takes awhile, so we'll let it run in the 
+background. 
+
+.exercise[
+0. Go to Kubernetes Engine on the GCP Console
+0. Wait for the API to be enabled
+0. Create a 'Standard' cluster with all of the default settings
+0. Wait -- or better yet do GKE cluster creation stretches
+]
 
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
@@ -719,7 +625,7 @@ Our sample application
 ---
 # Our sample application
 
-- We will clone the GitHub repository onto our `node1`
+- We will clone the GitHub repository onto our Cloud shell
 
 - The repository also contains scripts and tools that we will use through the workshop
 
@@ -734,7 +640,7 @@ fi
 ```
 -->
 
-- Clone the repository on `node1`:
+- Clone the repository on our cloud shell:
   ```bash
   git clone https://github.com/jpetazzo/container.training
   ```
@@ -847,6 +753,7 @@ and displays aggregated logs.
 class: pic
 
 ![Diagram showing the 5 containers of the applications](images/dockercoins-diagram.svg)
+
 
 .debug[[shared/sampleapp.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/sampleapp.md)]
 ---
@@ -978,14 +885,9 @@ class: extra-details
 - The `webui` container exposes a web dashboard; let's view it
 
 .exercise[
-
-- With a web browser, connect to `node1` on port 8000
-
-- Remember: the `nodeX` aliases are valid only on the nodes themselves
-
-- In your browser, you need to enter the IP address of your node
-
-<!-- ```open http://node1:8000``` -->
+0. Change the preview port on Cloud Shell to 8000
+0. Preview
+0. Profit
 
 ]
 

@@ -29,11 +29,34 @@ Deploying and Scaling Microservices<br/>with Docker and Kubernetes<br/>
 
 .debug[
 ```
-?? venv/
+ M slides/g2g.yml
+ M slides/g2g.yml.html
+ M slides/intro-fullday.yml.html
+ M slides/intro-selfpaced.yml.html
+ M slides/k8s/intro.md
+ M slides/k8s/kubectlexpose.md
+ M slides/k8s/kubectlget.md
+ M slides/k8s/kubenet.md
+ M slides/k8s/setup-k8s.md
+ M slides/k8s/versions-k8s.md
+ M slides/kadm-fullday.yml.html
+ M slides/kadm-twodays.yml.html
+ M slides/kube-fullday.yml.html
+ M slides/kube-halfday.yml.html
+ M slides/kube-selfpaced.yml.html
+ M slides/kube-twodays.yml.html
+ M slides/shared/about-slides.md
+ M slides/shared/connecting.md
+ M slides/shared/prereqs.md
+ M slides/shared/sampleapp.md
+ M slides/swarm-fullday.yml.html
+ M slides/swarm-halfday.yml.html
+ M slides/swarm-selfpaced.yml.html
+ M slides/swarm-video.yml.html
 
 ```
 
-These slides have been built from commit: 851dbf9
+These slides have been built from commit: 7f7bef3
 
 
 [shared/title.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/title.md)]
@@ -53,7 +76,7 @@ Deploying and Scaling Microservices<br/>with Docker and Kubernetes<br/><br/></br
 ---
 ## A brief introduction
 
-- This was initially written by [Jérôme Petazzoni](https://twitter.com/jpetazzo) to support in-person,
+- Shamelessly copied from [Jérôme Petazzoni](https://twitter.com/jpetazzo) to support in-person,
   instructor-led workshops and tutorials
   
 - Credit is also due to [multiple contributors](https://github.com/jpetazzo/container.training/graphs/contributors) — thank you!
@@ -98,29 +121,14 @@ class: self-paced
 
   https://github.com/jpetazzo/container.training
 
-- You can get updated "builds" of the slides there:
+- You can get updated "builds" of the slides from the canonical source:
 
   http://container.training/
+  
+- You can see these slides, which are less likely to be up to date
 
-<!--
-.exercise[
-```open https://github.com/jpetazzo/container.training```
-```open http://container.training/```
-]
--->
-
---
-
-- Typos? Mistakes? Questions? Feel free to hover over the bottom of the slide ...
-
-.footnote[.emoji[👇] Try it! The source file will be shown and you can view it on GitHub and fork and edit it.]
-
-<!--
-.exercise[
-```open https://github.com/jpetazzo/container.training/tree/master/slides/common/about-slides.md```
-]
--->
-
+  https://jen.run/g2g-kube
+  
 .debug[[shared/about-slides.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/about-slides.md)]
 ---
 
@@ -334,6 +342,8 @@ Pre-requirements
 ---
 # Pre-requirements
 
+- Be comfortable with the GCP console & Cloud Shell
+
 - Be comfortable with the UNIX command line
 
   - navigating directories
@@ -411,17 +421,20 @@ class: in-person, pic
 
 class: in-person
 
-## You get a cluster of cloud VMs
+## You get a GCP account
 
-- Each person gets a private cluster of cloud VMs (not shared with anybody else)
+- Each person gets a private GCP account
 
-- They'll remain up for the duration of the workshop
+- They'll remain active until the end of the day
 
-- You should have a little card with login+password+IP addresses
+- You should have a little blue card with credentials
 
-- You can automatically SSH from one VM to another
+.exercise[
 
-- The nodes have aliases: `node1`, `node2`, etc.
+0. Log in to your account
+0. Click on all of the 'accept' dialogs
+0. Open Cloud Shell 
+]
 
 .debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
 ---
@@ -447,110 +460,11 @@ class: in-person
 
 .debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
 ---
-
 class: in-person
-
-## SSH clients
-
-- On Linux, OS X, FreeBSD... you are probably all set
-
-- On Windows, get one of these:
-
-  - [putty](http://www.putty.org/)
-  - Microsoft [Win32 OpenSSH](https://github.com/PowerShell/Win32-OpenSSH/wiki/Install-Win32-OpenSSH)
-  - [Git BASH](https://git-for-windows.github.io/)
-  - [MobaXterm](http://mobaxterm.mobatek.net/)
-
-- On Android, [JuiceSSH](https://juicessh.com/)
-  ([Play Store](https://play.google.com/store/apps/details?id=com.sonelli.juicessh))
-  works pretty well
-
-- Nice-to-have: [Mosh](https://mosh.org/) instead of SSH, if your internet connection tends to lose packets
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-
-class: in-person, extra-details
-
-## What is this Mosh thing?
-
-*You don't have to use Mosh or even know about it to follow along.
-<br/>
-We're just telling you about it because some of us think it's cool!*
-
-- Mosh is "the mobile shell"
-
-- It is essentially SSH over UDP, with roaming features
-
-- It retransmits packets quickly, so it works great even on lossy connections
-
-  (Like hotel or conference WiFi)
-
-- It has intelligent local echo, so it works great even in high-latency connections
-
-  (Like hotel or conference WiFi)
-
-- It supports transparent roaming when your client IP address changes
-
-  (Like when you hop from hotel to conference WiFi)
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-
-class: in-person, extra-details
-
-## Using Mosh
-
-- To install it: `(apt|yum|brew) install mosh`
-
-- It has been pre-installed on the VMs that we are using
-
-- To connect to a remote machine: `mosh user@host`
-
-  (It is going to establish an SSH connection, then hand off to UDP)
-
-- It requires UDP ports to be open
-
-  (By default, it uses a UDP port between 60000 and 61000)
-
-.debug[[shared/prereqs.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/prereqs.md)]
----
-class: in-person
-
-## Connecting to our lab environment
-
-.exercise[
-
-- Log into the first VM (`node1`) with your SSH client
-
-<!--
-```bash
-for N in $(awk '/\Wnode/{print $2}' /etc/hosts); do
-  ssh -o StrictHostKeyChecking=no $N true
-done
-```
-
-```bash
-### FIXME find a way to reset the cluster, maybe?
-```
--->
-
-- Check that you can SSH (without password) to `node2`:
-  ```bash
-  ssh node2
-  ```
-- Type `exit` or `^D` to come back to `node1`
-
-<!-- ```bash exit``` -->
-
-]
-
-If anything goes wrong — ask for help!
-
-.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
----
 
 ## Doing or re-doing the workshop on your own?
+
+- This workshop assumes no weird security stuff that might exist in some GCP orgs
 
 - Use something like
   [Play-With-Docker](http://play-with-docker.com/) or
@@ -598,37 +512,15 @@ You will need a Docker ID to use Play-With-Docker.
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
 
-## We will (mostly) interact with node1 only
-
-*These remarks apply only when using multiple nodes, of course.*
-
-- Unless instructed, **all commands must be run from the first VM, `node1`**
-
-- We will only check out/copy the code on `node1`
-
-- During normal operations, we do not need access to the other nodes
-
-- If we had to troubleshoot issues, we would use a combination of:
-
-  - SSH (to access system logs, daemon status...)
-
-  - Docker API (to check running containers and container engine status)
-
-.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
----
-
 ## Terminals
 
 Once in a while, the instructions will say:
-<br/>"Open a new terminal."
+<br/>"Open a new terminal on node1."
 
-There are multiple ways to do this:
+This is because I haven't gone back and updated everything to refer to Cloud Shell explicitly
 
-- create a new window or tab on your machine, and SSH into the VM;
+Just open a new tab in Cloud shell
 
-- use screen or tmux on the VM and open a new window from there.
-
-You are welcome to use the method that you feel the most comfortable with.
 
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
@@ -656,11 +548,25 @@ It has been preinstalled on your workshop nodes.*
 
 .debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
 ---
+
+## Create a GKE cluster
+We need a Kubernetes cluster, so lets make one the easy way (with GKE).  This takes awhile, so we'll let it run in the 
+background. 
+
+.exercise[
+0. Go to Kubernetes Engine on the GCP Console
+0. Wait for the API to be enabled
+0. Create a 'Standard' cluster with all of the default settings
+0. Wait -- or better yet do GKE cluster creation stretches
+]
+
+.debug[[shared/connecting.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/connecting.md)]
+---
 ## Versions installed
 
-- Kubernetes 1.15.0
+- Kubernetes 1.12
 - Docker Engine 18.09.6
-- Docker Compose 1.21.1
+- Docker Compose 1.24
 
 <!-- ##VERSION## -->
 
@@ -729,7 +635,7 @@ Our sample application
 ---
 # Our sample application
 
-- We will clone the GitHub repository onto our `node1`
+- We will clone the GitHub repository onto our Cloud shell
 
 - The repository also contains scripts and tools that we will use through the workshop
 
@@ -744,7 +650,7 @@ fi
 ```
 -->
 
-- Clone the repository on `node1`:
+- Clone the repository on our cloud shell:
   ```bash
   git clone https://github.com/jpetazzo/container.training
   ```
@@ -857,6 +763,7 @@ and displays aggregated logs.
 class: pic
 
 ![Diagram showing the 5 containers of the applications](images/dockercoins-diagram.svg)
+
 
 .debug[[shared/sampleapp.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/sampleapp.md)]
 ---
@@ -988,14 +895,9 @@ class: extra-details
 - The `webui` container exposes a web dashboard; let's view it
 
 .exercise[
-
-- With a web browser, connect to `node1` on port 8000
-
-- Remember: the `nodeX` aliases are valid only on the nodes themselves
-
-- In your browser, you need to enter the IP address of your node
-
-<!-- ```open http://node1:8000``` -->
+0. Change the preview port on Cloud Shell to 8000
+0. Preview
+0. Profit
 
 ]
 
@@ -1911,9 +1813,8 @@ Kubernetes network model
 
 ## Kubernetes network model: in practice
 
-- The nodes that we are using have been set up to use [Weave](https://github.com/weaveworks/weave)
-
-- We don't endorse Weave in a particular way, it just Works For Us
+- This workshop typically uses [Weave](https://github.com/weaveworks/weave)
+  - GKE has its [own network model](https://cloud.google.com/kubernetes-engine/docs/concepts/network-overview)
 
 - Don't worry about the warning about `kube-proxy` performance
 
@@ -2028,7 +1929,7 @@ First contact with `kubectl`
 
   (Everything you can do with `kubectl`, you can do directly with the API)
 
-- On our machines, there is a `~/.kube/config` file with:
+- On typical, there is a `~/.kube/config` file with:
 
   - the Kubernetes API address
 
@@ -2039,6 +1940,21 @@ First contact with `kubectl`
 - Or directly `--server`, `--user`, etc.
 
 - `kubectl` can be pronounced "Cube C T L", "Cube cuttle", "Cube cuddle"...
+
+.debug[[k8s/kubectlget.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/kubectlget.md)]
+---
+
+## Connect to our cluster
+
+Is it up yet?  Yay! Let's go.
+
+.exercise[
+0. Click the 'Connect' button next to your new cluster
+0. Run that command in cloud shell
+]
+
+This will create the `~/.kube/config` file and `kubectl` will start working
+
 
 .debug[[k8s/kubectlget.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/kubectlget.md)]
 ---
@@ -2175,7 +2091,7 @@ class: extra-details
 
 - However, YAML output is often simultaneously too much and not enough
 
-- For instance, `kubectl get node node1 -o yaml` is:
+- For instance, `kubectl get node NODE_NAME -o yaml` is:
 
   - too much information (e.g.: list of images available on this node)
 
@@ -2192,20 +2108,20 @@ class: extra-details
 
 - `kubectl describe` needs a resource type and (optionally) a resource name
 
-- It is possible to provide a resource name *prefix*
-
-  (all matching objects will be displayed)
+- It is possible to provide a resource name *prefix* (all matching objects will be displayed)
 
 - `kubectl describe` will retrieve some extra information about the resource
 
 .exercise[
 
 - Look at the information available for `node1` with one of the following commands:
-  ```bash
-  kubectl describe node/node1
-  kubectl describe node node1
+  ```bash  
+  kubectl get nodes  # To get node names
+  ...
+  
+  kubectl describe node/NODE_NAME
+  kubectl describe node NODE_NAME
   ```
-
 ]
 
 (We should notice a bunch of control plane pods.)
@@ -2341,21 +2257,20 @@ The error that we see is expected: the Kubernetes API requires authentication.
 
 ## What are all these control plane pods?
 
+<!--
+in GKE they run elsewhere
 - `etcd` is our etcd server
 
 - `kube-apiserver` is the API server
+-->
 
 - `kube-controller-manager` and `kube-scheduler` are other control plane components
 
-- `coredns` provides DNS-based service discovery ([replacing kube-dns as of 1.11](https://kubernetes.io/blog/2018/07/10/coredns-ga-for-kubernetes-cluster-dns/))
+- `kube-dns` provides DNS-based service discovery
 
 - `kube-proxy` is the (per-node) component managing port mappings and such
 
-- `weave` is the (per-node) component managing the network overlay
-
 - the `READY` column indicates the number of containers in each pod
-
-  (1 for most pods, but `weave` has 2, for instance)
 
 .debug[[k8s/kubectlget.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/kubectlget.md)]
 ---
@@ -2419,6 +2334,8 @@ Nothing!
 class: extra-details
 
 ## Exploring `kube-public`
+
+(This does not seem to work in GKE)
 
 - The only interesting object in `kube-public` is a ConfigMap named `cluster-info`
 
@@ -2538,13 +2455,13 @@ Setting up Kubernetes
 ---
 # Setting up Kubernetes
 
-- How did we set up these Kubernetes clusters that we're using?
+- How do people set up their own clusters?
 
 --
 
 <!-- ##VERSION## -->
 
-- We used `kubeadm` on freshly installed VM instances running Ubuntu LTS
+- container.training uses `kubeadm` on freshly installed VM instances running Ubuntu LTS
 
     1. Install Docker
 
@@ -3366,30 +3283,22 @@ Under the hood: `kube-proxy` is using a userland proxy and a bunch of `iptables`
 
 .exercise[
 
-- Let's obtain the IP address that was allocated for our service, *programmatically:*
+- Use port forwarding to access the GKE network (in a new tab)
   ```bash
-  IP=$(kubectl get svc httpenv -o go-template --template '{{ .spec.clusterIP }}')
+  kubectl port-forward svc/httpenv 8888:8888
   ```
-
-<!--
-```hide kubectl wait deploy httpenv --for condition=available```
--->
 
 - Send a few requests:
   ```bash
-  curl http://$IP:8888/
-  ```
-
-- Too much output? Filter it with `jq`:
-  ```bash
-  curl -s http://$IP:8888/ | jq .HOSTNAME
+  curl http://localhost:8888/
+  curl -s http://localhost:8888/ | jq .HOSTNAME
   ```
 
 ]
 
 --
 
-Try it a few times! Our requests are load balanced across multiple pods.
+Try it a few times! Our requests (might be) load balanced across multiple pods.
 
 .debug[[k8s/kubectlexpose.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/kubectlexpose.md)]
 ---

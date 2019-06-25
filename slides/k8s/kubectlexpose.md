@@ -146,30 +146,22 @@ Under the hood: `kube-proxy` is using a userland proxy and a bunch of `iptables`
 
 .exercise[
 
-- Let's obtain the IP address that was allocated for our service, *programmatically:*
+- Use port forwarding to access the GKE network (in a new tab)
   ```bash
-  IP=$(kubectl get svc httpenv -o go-template --template '{{ .spec.clusterIP }}')
+  kubectl port-forward svc/httpenv 8888:8888
   ```
-
-<!--
-```hide kubectl wait deploy httpenv --for condition=available```
--->
 
 - Send a few requests:
   ```bash
-  curl http://$IP:8888/
-  ```
-
-- Too much output? Filter it with `jq`:
-  ```bash
-  curl -s http://$IP:8888/ | jq .HOSTNAME
+  curl http://localhost:8888/
+  curl -s http://localhost:8888/ | jq .HOSTNAME
   ```
 
 ]
 
 --
 
-Try it a few times! Our requests are load balanced across multiple pods.
+Try it a few times! Our requests (might be) load balanced across multiple pods.
 
 ---
 

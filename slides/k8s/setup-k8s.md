@@ -1,12 +1,12 @@
 # Setting up Kubernetes
 
-- How did we set up these Kubernetes clusters that we're using?
+- How do people set up their own clusters?
 
 --
 
 <!-- ##VERSION## -->
 
-- We used `kubeadm` on freshly installed VM instances running Ubuntu LTS
+- container.training uses `kubeadm` on freshly installed VM instances running Ubuntu LTS
 
     1. Install Docker
 
