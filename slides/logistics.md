@@ -1,35 +1,18 @@
 ## Intros
 
-- This slide should be customized by the tutorial instructor(s).
-
 - Hello! We are:
 
-   - .emoji[👩🏻‍🏫] Ann O'Nymous ([@...](https://twitter.com/...), Megacorp Inc)
+   - Anthony Bushong
+   - Jen Tong
+   - Sandeep Dinesh
 
-   - .emoji[👨🏾‍🎓] Stu Dent ([@...](https://twitter.com/...), University of Wakanda)
+- Schedule:
+  - 10:00 to 12:00 - Workshop pt I
+  - 12:00 to 1:00 - Lunch break
+  - 1:00 to 3:00 - Workshop pt II
+  - 3:00 to 3:30 - Email / snack coffee break
+  - 3:30 to 5:00 - Workshop pt III
 
- <!-- .dummy[
-
-   - .emoji[👷🏻‍♀️] AJ ([@s0ulshake](https://twitter.com/s0ulshake), Travis CI)
-
-   - .emoji[🚁] Alexandre ([@alexbuisine](https://twitter.com/alexbuisine), Enix SAS)
-
-   - .emoji[🐳] Jérôme ([@jpetazzo](https://twitter.com/jpetazzo), Enix SAS)
-
-   - .emoji[⛵] Jérémy ([@jeremygarrouste](twitter.com/jeremygarrouste), Inpiwee)
-
-   - .emoji[🎧] Romain ([@rdegez](https://twitter.com/rdegez), Enix SAS)
-
-] -->
-
-- The workshop will run from ...
-
-- There will be a lunch break at ...
-
-  (And coffee breaks!)
-
-- Feel free to interrupt for questions at any time
-
-- *Especially when you see full screen container pictures!*
+- Feel free to interrupt for questions at any time.  *Especially when you see full screen container pictures!*
 
 - Live feedback, questions, help: @@CHAT@@

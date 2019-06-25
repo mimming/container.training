@@ -11,11 +11,7 @@ class: title, in-person
 @@TITLE@@<br/></br>
 
 .footnote[
-**Be kind to the WiFi!**<br/>
-<!-- *Use the 5G network.* -->
-*Don't use your hotspot.*<br/>
-*Don't stream videos or download big files during the workshop[.](https://www.youtube.com/watch?v=h16zyxiwDLY)*<br/>
-*Thank you!*
+*This is my first time running a Kubernetes Workshop.  I've recruited some awesome help, but it's also our first time collaborating.  Thanks for bearing with us[.](https://www.youtube.com/watch?v=h16zyxiwDLY)*
 
 **Slides: @@SLIDES@@**
 ]
