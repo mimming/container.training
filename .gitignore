@@ -1,13 +1,11 @@
+venv/**
 slides/venv/**
 *.pyc
 *.swp
 *~
 prepare-vms/tags
 prepare-vms/infra
-slides/*.yml.html
 slides/autopilot/state.yaml
-slides/index.html
-slides/past.html
 node_modules
 
 ### macOS ###
