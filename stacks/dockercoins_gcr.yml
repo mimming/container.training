@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  rng:
+    build: dockercoins/rng
+    image: gcr.io/${PROJECT_ID}/rng:${TAG-latest}
+    deploy:
+      mode: global
+
+  hasher:
+    build: dockercoins/hasher
+    image: gcr.io/${PROJECT_ID}/hasher:${TAG-latest}
+
+  webui:
+    build: dockercoins/webui
+    image: gcr.io/${PROJECT_ID}/webui:${TAG-latest}
+    ports:
+      - "8000:80"
+
+  redis:
+    image: redis
+
+  worker:
+    build: dockercoins/worker
+    image: gcr.io/${PROJECT_ID}/worker:${TAG-latest}
+    deploy:
+      replicas: 10

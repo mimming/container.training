@@ -90,6 +90,8 @@ background.
 .exercise[
 0. Go to Kubernetes Engine on the GCP Console
 0. Wait for the API to be enabled
-0. Create a 'Standard' cluster with all of the default settings
+0. Select 'Standard' cluster
+0. Change the node pool from 3 to 5
+0. Click 'Create'
 0. Wait -- or better yet do GKE cluster creation stretches
 ]

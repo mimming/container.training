@@ -65,9 +65,17 @@ You'll want the `3xxxx` port.
 
 .exercise[
 
+- Create another firewall rule
+
+  ```bash
+  gcloud compute firewall-rules create dash-node-port --allow tcp:<PORT>
+  ```
+
 - Connect to http://oneofournodes:3xxxx/
 
-<!-- ```open http://node1:3xxxx/``` -->
+  ```bash
+  open http://<NODE_IP>:<PORT>/
+  ```
 
 ]
 
@@ -81,7 +89,7 @@ The dashboard will then ask you which authentication you want to use.
 
   - token (associated with a role that has appropriate permissions)
 
-  - kubeconfig (e.g. using the `~/.kube/config` file from `node1`)
+  - kubeconfig (e.g. using the `~/.kube/config` file from `cloud shell`)
 
   - "skip" (use the dashboard "service account")
 

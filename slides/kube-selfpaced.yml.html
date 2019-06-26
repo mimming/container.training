@@ -29,34 +29,33 @@ Deploying and Scaling Microservices<br/>with Docker and Kubernetes<br/>
 
 .debug[
 ```
- M slides/g2g.yml
  M slides/g2g.yml.html
  M slides/intro-fullday.yml.html
  M slides/intro-selfpaced.yml.html
- M slides/k8s/intro.md
- M slides/k8s/kubectlexpose.md
- M slides/k8s/kubectlget.md
- M slides/k8s/kubenet.md
- M slides/k8s/setup-k8s.md
- M slides/k8s/versions-k8s.md
+ M slides/k8s/daemonset.md
+ M slides/k8s/dashboard.md
+ M slides/k8s/logs-cli.md
+ M slides/k8s/namespaces.md
+ M slides/k8s/ourapponkube.md
+ M slides/k8s/rollout.md
+ M slides/k8s/scalingdockercoins.md
  M slides/kadm-fullday.yml.html
  M slides/kadm-twodays.yml.html
  M slides/kube-fullday.yml.html
  M slides/kube-halfday.yml.html
  M slides/kube-selfpaced.yml.html
  M slides/kube-twodays.yml.html
- M slides/shared/about-slides.md
  M slides/shared/connecting.md
- M slides/shared/prereqs.md
- M slides/shared/sampleapp.md
+ M slides/shared/thankyou.md
  M slides/swarm-fullday.yml.html
  M slides/swarm-halfday.yml.html
  M slides/swarm-selfpaced.yml.html
  M slides/swarm-video.yml.html
+AM stacks/dockercoins_gcr.yml
 
 ```
 
-These slides have been built from commit: 7f7bef3
+These slides have been built from commit: f8b6918
 
 
 [shared/title.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/title.md)]
@@ -556,7 +555,9 @@ background.
 .exercise[
 0. Go to Kubernetes Engine on the GCP Console
 0. Wait for the API to be enabled
-0. Create a 'Standard' cluster with all of the default settings
+0. Select 'Standard' cluster
+0. Change the node pool from 3 to 5
+0. Click 'Create'
 0. Wait -- or better yet do GKE cluster creation stretches
 ]
 
@@ -3991,7 +3992,7 @@ We should now see the `worker`, well, working happily.
   ```bash
   kubectl get svc
   ```
-
+- Remember it for the next slide...
 ]
 
 .debug[[k8s/ourapponkube.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/ourapponkube.md)]
@@ -4003,7 +4004,13 @@ We should now see the `worker`, well, working happily.
 
 .exercise[
 
-- Open the web UI in your browser (http://node-ip-address:3xxxx/)
+0. Create a GCP firewall rule to allow access
+
+   ```bash
+   gcloud compute firewall-rules create test-node-port --allow tcp:<NODE_PORT>
+   ```
+
+0. Open the web UI in your browser (http://node-ip-address:3xxxx/)
 
 <!-- ```open http://node1:3xxxx/``` -->
 
@@ -4722,9 +4729,17 @@ You'll want the `3xxxx` port.
 
 .exercise[
 
+- Create another firewall rule
+
+  ```bash
+  gcloud compute firewall-rules create dash-node-port --allow tcp:<PORT>
+  ```
+
 - Connect to http://oneofournodes:3xxxx/
 
-<!-- ```open http://node1:3xxxx/``` -->
+  ```bash
+  open http://<NODE_IP>:<PORT>/
+  ```
 
 ]
 
@@ -4739,7 +4754,7 @@ The dashboard will then ask you which authentication you want to use.
 
   - token (associated with a role that has appropriate permissions)
 
-  - kubeconfig (e.g. using the `~/.kube/config` file from `node1`)
+  - kubeconfig (e.g. using the `~/.kube/config` file from `cloud shell`)
 
   - "skip" (use the dashboard "service account")
 
@@ -4946,8 +4961,6 @@ Daemon sets
 - Daemon sets are great for cluster-wide, per-node processes:
 
   - `kube-proxy`
-
-  - `weave` (our overlay network)
 
   - monitoring agents
 
@@ -5172,13 +5185,7 @@ daemonset.apps/rng  2        2        2      2           2          <none>      
 
 --
 
-The daemon set created one pod per node, except on the master node.
-
-The master node has [taints](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) preventing pods from running there.
-
-(To schedule a pod on this node anyway, the pod will require appropriate [tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/).)
-
-.footnote[(Off by one? We don't run these pods on the node hosting the control plane.)]
+The daemon set created one pod per node.
 
 .debug[[k8s/daemonset.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/daemonset.md)]
 ---
@@ -5735,11 +5742,7 @@ Rolling updates
 
 ## Building a new version of the `worker` service
 
-.warning[
-Only run these commands if you have built and pushed DockerCoins to a local registry.
-<br/>
-If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip this.
-]
+... and pushing the images to Google Container Registry 
 
 .exercise[
 
@@ -5749,10 +5752,10 @@ If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip th
 
 - Build a new tag and push it to the registry:
   ```bash
-  #export REGISTRY=localhost:3xxxx
+  export PROJECT_ID=<your project id>
   export TAG=v0.2
-  docker-compose -f dockercoins.yml build
-  docker-compose -f dockercoins.yml push
+  docker-compose -f dockercoins_gcr.yml build
+  docker-compose -f dockercoins_gcr.yml push
   ```
 
 ]
@@ -5778,7 +5781,7 @@ If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip th
 
 - Update `worker` either with `kubectl edit`, or by running:
   ```bash
-  kubectl set image deploy worker worker=$REGISTRY/worker:$TAG
+  kubectl set image deploy worker worker=gcr.io/<PROJECT_ID>/worker:v0.2
   ```
 
 ]
@@ -6379,11 +6382,20 @@ Note: we could have used `--namespace=default` for the same result.
 
 - With `kubectx`, we can switch quickly between contexts
 
-- Both tools are simple shell scripts available from https://github.com/ahmetb/kubectx
+- Both tools are simple shell scripts available from https://github.com/ahmetb/kubectx  
 
-- On our clusters, they are installed as `kns` and `kctx`
+.exercise[
+Install them on your cloud shell (ignore the warnings)
 
-  (for brevity and to avoid completion clashes between `kubectx` and `kubectl`)
+```bash
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kctx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kns
+```
+]
+
+- We're using `kns` and `kctx` (for brevity and to avoid completion clashes 
+between `kubectx` and `kubectl`)
 
 .debug[[k8s/namespaces.md](https://github.com/mimming/container.training.git/tree/master/slides/k8s/namespaces.md)]
 ---
@@ -7320,15 +7332,10 @@ Exactly what we need!
 
 .exercise[
 
-- View what's up with the `weave` system containers:
+- View what's up with the `kube-proxy` system containers:
   ```bash
-  stern --tail 1 --timestamps --all-namespaces weave
+  stern --tail 1 --timestamps --all-namespaces kube-proxy
   ```
-
-<!--
-```wait weave-npc```
-```keys ^C```
--->
 
 ]
 
@@ -15256,6 +15263,8 @@ Thank you!
 class: title, in-person
 
 That's all, folks! <br/> Questions?
+
+Feedback please:  go/g2g-kube-feedback
 
 ![end](images/end.jpg)
 

@@ -63,11 +63,7 @@
 
 ## Building a new version of the `worker` service
 
-.warning[
-Only run these commands if you have built and pushed DockerCoins to a local registry.
-<br/>
-If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip this.
-]
+... and pushing the images to Google Container Registry 
 
 .exercise[
 
@@ -77,10 +73,10 @@ If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip th
 
 - Build a new tag and push it to the registry:
   ```bash
-  #export REGISTRY=localhost:3xxxx
+  export PROJECT_ID=<your project id>
   export TAG=v0.2
-  docker-compose -f dockercoins.yml build
-  docker-compose -f dockercoins.yml push
+  docker-compose -f dockercoins_gcr.yml build
+  docker-compose -f dockercoins_gcr.yml push
   ```
 
 ]
@@ -105,7 +101,7 @@ If you are using images from the Docker Hub (`dockercoins/worker:v0.1`), skip th
 
 - Update `worker` either with `kubectl edit`, or by running:
   ```bash
-  kubectl set image deploy worker worker=$REGISTRY/worker:$TAG
+  kubectl set image deploy worker worker=gcr.io/<PROJECT_ID>/worker:v0.2
   ```
 
 ]

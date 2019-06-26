@@ -29,34 +29,33 @@ Container Orchestration<br/>with Docker and Swarm<br/>
 
 .debug[
 ```
- M slides/g2g.yml
  M slides/g2g.yml.html
  M slides/intro-fullday.yml.html
  M slides/intro-selfpaced.yml.html
- M slides/k8s/intro.md
- M slides/k8s/kubectlexpose.md
- M slides/k8s/kubectlget.md
- M slides/k8s/kubenet.md
- M slides/k8s/setup-k8s.md
- M slides/k8s/versions-k8s.md
+ M slides/k8s/daemonset.md
+ M slides/k8s/dashboard.md
+ M slides/k8s/logs-cli.md
+ M slides/k8s/namespaces.md
+ M slides/k8s/ourapponkube.md
+ M slides/k8s/rollout.md
+ M slides/k8s/scalingdockercoins.md
  M slides/kadm-fullday.yml.html
  M slides/kadm-twodays.yml.html
  M slides/kube-fullday.yml.html
  M slides/kube-halfday.yml.html
  M slides/kube-selfpaced.yml.html
  M slides/kube-twodays.yml.html
- M slides/shared/about-slides.md
  M slides/shared/connecting.md
- M slides/shared/prereqs.md
- M slides/shared/sampleapp.md
+ M slides/shared/thankyou.md
  M slides/swarm-fullday.yml.html
  M slides/swarm-halfday.yml.html
  M slides/swarm-selfpaced.yml.html
  M slides/swarm-video.yml.html
+AM stacks/dockercoins_gcr.yml
 
 ```
 
-These slides have been built from commit: 7f7bef3
+These slides have been built from commit: f8b6918
 
 
 [shared/title.md](https://github.com/mimming/container.training.git/tree/master/slides/shared/title.md)]
@@ -474,7 +473,9 @@ background.
 .exercise[
 0. Go to Kubernetes Engine on the GCP Console
 0. Wait for the API to be enabled
-0. Create a 'Standard' cluster with all of the default settings
+0. Select 'Standard' cluster
+0. Change the node pool from 3 to 5
+0. Click 'Create'
 0. Wait -- or better yet do GKE cluster creation stretches
 ]
 
@@ -6041,6 +6042,8 @@ Thank you!
 class: title, in-person
 
 That's all, folks! <br/> Questions?
+
+Feedback please:  go/g2g-kube-feedback
 
 ![end](images/end.jpg)
 

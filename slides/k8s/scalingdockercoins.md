@@ -39,7 +39,7 @@
 
 ]
 
-After a few seconds, the graph in the web UI should show up.
+After a few seconds, the graph in the web UI should ramp up.
 
 ---
 
@@ -152,13 +152,7 @@ class: extra-details
   httping [-c count] http://host:port/path
   ```
 
-- Or even simpler:
-  ```
-  httping ip.ad.dr.ess
-  ```
-
-- We will use `httping` on the ClusterIP addresses of our services
-
+]
 ---
 
 ## Obtaining ClusterIP addresses
@@ -171,14 +165,28 @@ class: extra-details
 
 - Retrieve the IP addresses:
   ```bash
-  HASHER=$(kubectl get svc hasher -o go-template={{.spec.clusterIP}})
-  RNG=$(kubectl get svc rng -o go-template={{.spec.clusterIP}})
+  kubectl get svc hasher -o go-template={{.spec.clusterIP}}
+  kubectl get svc rng -o go-template={{.spec.clusterIP}}
   ```
-
 ]
 
-Now we can access the IP addresses of our services through `$HASHER` and `$RNG`.
+---
+## Getting a shell on our container network
 
+We could use port forwarding technique again, but that would be cumbersome for 
+interactive troubleshooting.  Let's do something different.
+
+.exercise[
+0. Create a shell using these instructions: 
+   https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+0. Log into the shell
+0. Install httping
+
+```bash
+apt-get update
+apt-get install httping
+```
+]
 ---
 
 ## Checking `hasher` and `rng` response times
@@ -187,8 +195,8 @@ Now we can access the IP addresses of our services through `$HASHER` and `$RNG`.
 
 - Check the response times for both services:
   ```bash
-  httping -c 3 $HASHER
-  httping -c 3 $RNG
+  httping -c 3 <HASHER_IP>
+  httping -c 3 <RNG_IP>
   ```
 
 ]

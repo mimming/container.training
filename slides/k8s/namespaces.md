@@ -327,11 +327,20 @@ Note: we could have used `--namespace=default` for the same result.
 
 - With `kubectx`, we can switch quickly between contexts
 
-- Both tools are simple shell scripts available from https://github.com/ahmetb/kubectx
+- Both tools are simple shell scripts available from https://github.com/ahmetb/kubectx  
 
-- On our clusters, they are installed as `kns` and `kctx`
+.exercise[
+Install them on your cloud shell (ignore the warnings)
 
-  (for brevity and to avoid completion clashes between `kubectx` and `kubectl`)
+```bash
+sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
+sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kctx
+sudo ln -s /opt/kubectx/kubens /usr/local/bin/kns
+```
+]
+
+- We're using `kns` and `kctx` (for brevity and to avoid completion clashes 
+between `kubectx` and `kubectl`)
 
 ---
 

@@ -108,15 +108,10 @@ Exactly what we need!
 
 .exercise[
 
-- View what's up with the `weave` system containers:
+- View what's up with the `kube-proxy` system containers:
   ```bash
-  stern --tail 1 --timestamps --all-namespaces weave
+  stern --tail 1 --timestamps --all-namespaces kube-proxy
   ```
-
-<!--
-```wait weave-npc```
-```keys ^C```
--->
 
 ]
 
